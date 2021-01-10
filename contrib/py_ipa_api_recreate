@@ -179,7 +179,7 @@ class MetaAPICreator:
             '    def __init__(self, host=None, verify_ssl=True, dns_discovery=True):'
         )
         self.append(
-            '        super(ClientMeta, self).__init__(host=host, verify_ssl=verify_ssl, version=self.version, dns_discovery=dns_discovery)'
+            '        super(ClientMeta, self).__init__(host=host, verify_ssl=verify_ssl, version=self.version, dns_discovery=dns_discovery, request_timeout=request_timeout)'
         )
 
     def _func_add(self, command, spec):

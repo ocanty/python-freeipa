@@ -4,8 +4,8 @@ from python_freeipa.client import Client
 class ClientMeta(Client):
     version = '2.235'
 
-    def __init__(self, host=None, verify_ssl=True, dns_discovery=True):
-        super(ClientMeta, self).__init__(host=host, verify_ssl=verify_ssl, version=self.version, dns_discovery=dns_discovery)
+    def __init__(self, host=None, verify_ssl=True, dns_discovery=True, request_timeout=5):
+        super(ClientMeta, self).__init__(host=host, verify_ssl=verify_ssl, version=self.version, dns_discovery=dns_discovery, request_timeout=request_timeout)
 
     def aci_add(
         self,

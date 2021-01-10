@@ -107,7 +107,14 @@ class AuthenticatedSession(object):
 class Client(object):
     """Lightweight FreeIPA JSON RPC client."""
 
-    def __init__(self, host=None, verify_ssl=True, version=None, dns_discovery=True):
+    def __init__(
+        self,
+        host=None,
+        verify_ssl=True,
+        version=None,
+        dns_discovery=True,
+        request_timeout=5,
+    ):
         """
         Initialize client with connection options.
 
@@ -125,12 +132,15 @@ class Client(object):
                            until one is found that will respond to our login request.
                            if host param is set, host param will always win, and no dns discovery is performed.
         :type dns_discovery: str
+        :param request_timeout: Number of seconds before a request will be timed out
+        :type request_timeout: int
         """
         self._dns_discovery = dns_discovery
         self._host = host
         self._current_host = None
         self._base_url = 'https://{0}/ipa'.format(self._host)
         self._verify_ssl = verify_ssl
+        self._request_timeout = request_timeout
         self._version = version
         self._session = requests.Session()
         self._log = logging.getLogger(__name__)
@@ -320,7 +330,11 @@ class Client(object):
         )
 
         response = self._session.post(
-            session_url, headers=headers, data=json.dumps(data), verify=self._verify_ssl
+            session_url,
+            headers=headers,
+            data=json.dumps(data),
+            verify=self._verify_ssl,
+            timeout=self._request_timeout,
         )
 
         if response.status_code == 401:
