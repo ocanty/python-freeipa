@@ -329,13 +329,16 @@ class Client(object):
             )
         )
 
-        response = self._session.post(
-            session_url,
-            headers=headers,
-            data=json.dumps(data),
-            verify=self._verify_ssl,
-            timeout=self._request_timeout,
-        )
+        try:
+            response = self._session.post(
+                session_url,
+                headers=headers,
+                data=json.dumps(data),
+                verify=self._verify_ssl,
+                timeout=self._request_timeout,
+            )
+        except requests.exceptions.Timeout:
+            raise FreeIPAError(message="Request timed out", code=408)
 
         if response.status_code == 401:
             raise Unauthorized()
